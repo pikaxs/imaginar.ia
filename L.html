@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flores Amarillas &lt;3</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inclusive+Sans:ital@1&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Inclusive Sans', sans-serif;
+            background: linear-gradient(70deg, #FFA07A, #FFD700, #87CEFA);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 5vw;
+            color: white;
+            margin: 20px;
+        }
+
+        .Con-2 {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .Button {
+            font-family: monospace;
+            font-size: 4vw;
+            transition-duration: 0.2s;
+            padding: 15px 30px;
+            border-radius: 8px;
+            background-color: orange;
+            color: white;
+            border: 2px solid #FFA500;
+            cursor: pointer;
+            margin: 10px;
+            min-width: 100px;
+            width: 80%;
+            max-width: 300px;
+        }
+
+        .Button:hover {
+            transform: scale(1.1);
+            background-color: yellow;
+            color: black;
+        }
+
+        .Contenedor-Binicio {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+
+        .flower-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin-top: 30px;
+            position: relative;
+            width: 100%;
+            height: 100%; /* Asegura que las flores se ajusten bien en pantalla */
+        }
+
+        .flower {
+            width: 15vw; /* Ajustado para pantallas más pequeñas */
+            height: 15vw; /* Ajustado para pantallas más pequeñas */
+            margin: 5px;
+            position: absolute;
+            animation: appear 0.5s ease forwards;
+        }
+
+        @keyframes appear {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .petal {
+            width: 10%;
+            height: 20%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform-origin: 0 100%;
+            animation: petalAnimation 0.5s ease forwards;
+        }
+
+        @keyframes petalAnimation {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+            }
+        }
+
+        .notification {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(255, 165, 0, 0.9);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 1000;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 16px;
+            margin-left: 10px;
+        }
+
+        .mensaje {
+            display: none;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4vw; /* Ajustado para mayor visibilidad en móvil */
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="notification" id="notification">
+        ¡hola! sabes se que hemos estado poco tiempo hablando y bla bla pero sinceramente creo que eres para mi te quiero te amo y quiero saber todo de ti hasta la ultima esquina de tu personalidad quiero disfrutar tantas cosas contigo quiero verte feliz quiero llorar contigo sonreir contigo y sobre todo quiero amarte hasta el fin eres la mejor y sobre todo eres mi diamantito azul mi linsa hermosa y que quiero cuidar diamantito, por cierto no te deje sin flores amarillas mi preciosa y hermosa futura o ya novia no va a ser espectadora c; Y RECUERDA QUE YO TE AMO MAS 🌸🩷🌸🩷🌸🩷🌸🩷🌸🩷
+        <button class="close-btn" id="closeNotification">X</button>
+    </div>
+
+    <h1>❤️ Para ti mi linda liliana❤️</h1>
+    <div class="Contenedor-Binicio">
+        <button class="Button" id="BVer">boop</button>
+    </div>
+
+    <div class="Con-2">
+        <h1 id="Titulo">Elije una Opción</h1>
+        <div class="Con">
+            <button class="Button" id="B1">🩷🌸1 Flor🌸🩷</button>
+            <button class="Button" id="B12">🩷🌸12 Flores🌸🩷</button>
+        </div>
+    </div>
+
+    <div class="flower-container"></div>
+
+    <div class="mensaje" id="mensaje1">🩷🌸¡eres mi niña hermosa preciosa te voy a comerte a besos! 🌸🩷</div>
+    <div class="mensaje" id="mensaje12">🩷🌸¡eres como el mi terroncito de azucar mi pokie mi mundo mi todo te amo! 🌸🩷</div>
+    <script>
+        const bVer = document.getElementById('BVer');
+        const con2 = document.querySelector('.Con-2');
+        const flowerContainer = document.querySelector(".flower-container");
+        const notification = document.getElementById('notification');
+        const closeNotification = document.getElementById('closeNotification');
+
+        bVer.addEventListener('click', () => {
+            con2.style.display = 'flex'; 
+            bVer.style.display = 'none'; 
+            notification.style.display = 'block';
+        });
+
+        closeNotification.addEventListener('click', () => {
+            notification.style.display = 'none';
+        });
+
+        function createFlower() {
+            const maxFlowersOnScreen = 15;
+            if (document.querySelectorAll(".flower").length >= maxFlowersOnScreen) {
+                return;
+            }
+
+            const maxFlowers = Math.ceil(Math.random() * 5 + 1);
+            const existingPositions = [];
+
+            for (let j = 0; j < maxFlowers; j++) {
+                let positionValid = false;
+                let randomX, randomY;
+
+                while (!positionValid) {
+                    randomX = Math.random() * (window.innerWidth - 100); 
+                    randomY = Math.random() * (window.innerHeight - 100);
+                    positionValid = true;
+
+                    for (const position of existingPositions) {
+                        const distance = Math.sqrt(Math.pow(position.x - randomX, 2) + Math.pow(position.y - randomY, 2));
+                        if (distance < 150) { // Distancia mínima ajustada
+                            positionValid = false;
+                            break;
+                        }
+                    }
+                }
+
+                existingPositions.push({ x: randomX, y: randomY });
+
+                const flower = document.createElement("div");
+                flower.classList.add("flower");
+
+                for (let i = 1; i <= 10; i++) {
+                    const petal = document.createElement("div");
+                    petal.classList.add("petal", `p${i}`);
+                    petal.textContent = "🌻";
+                    petal.style.fontSize = "20px"; 
+                    petal.style.position = "absolute";
+                    petal.style.top = "50%";
+                    petal.style.left = "50%";
+                    petal.style.transform = "translate(-50%, -50%)";
+                    flower.appendChild(petal);
+                }
+
+                const emoji = document.createElement("div");
+                emoji.textContent = "🩷";
+                emoji.style.position = "absolute";
+                emoji.style.top = "50%";
+                emoji.style.left = "50%";
+                emoji.style.transform = "translate(-50%, -50%)";
+                emoji.style.fontSize = "30px"; 
+                flower.appendChild(emoji);
+
+                flower.style.position = "fixed";
+                flower.style.left = `${randomX}px`;
+                flower.style.top = `${randomY}px`;
+
+                flowerContainer.appendChild(flower);
+                flower.classList.add('flower-appear');
+            }
+        }
+
+        document.getElementById("B1").addEventListener("click", () => {
+            createFlower();
+            const mensaje1 = document.getElementById("mensaje1");
+            mensaje1.style.display = "block";
+            setTimeout(() => {
+                mensaje1.style.display = "none";
+            }, 4000);
+        });
+
+        document.getElementById("B12").addEventListener("click", () => {
+            for (let i = 0; i < 12; i++) {
+                createFlower();
+            }
+            const mensaje12 = document.getElementById("mensaje12");
+            mensaje12.style.display = "block";
+            setTimeout(() => {
+                mensaje12.style.display = "none";
+            }, 4000);
+        });
+    </script>
+</body>
+</html>

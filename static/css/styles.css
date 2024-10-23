@@ -1,0 +1,454 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Pangolin&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+/* Estilos generales */
+body {
+    background-color: #ffebcc; /* Fondo cálido */
+    font-family: 'Pangolin', cursive;
+    color: #fff;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* Encabezado */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+.header {
+    background-color: #ff6b6b; /* Rojo cálido */
+    padding: 1% 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Roboto', sans-serif;
+}
+
+h1 {
+    color: #fff;
+    font-size: 3.5rem;
+    font-family: 'Fredoka One', cursive;
+    margin: 0;
+}
+
+h1 span {
+    display: inline-block;
+    animation: wave 1.5s ease-in-out infinite;
+    color: #ffe66d; /* Amarillo cálido */
+}
+
+h1 span:nth-child(odd) {
+    animation-delay: 0.1s;
+}
+
+h1 span:nth-child(even) {
+    animation-delay: 0.3s;
+}
+
+@keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* Contenedor principal del contenido */
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 2%;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.character {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 80px;
+    height: auto;
+    z-index: 9999;
+}
+
+.character img {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
+/* Contenedores de las imágenes */
+.image-container {
+    position: fixed; /* Fija la imagen en la pantalla */
+    top: 15%; /* Ajusta la altura donde se muestra la imagen */
+    width: 15%; /* Ajusta el ancho de las imágenes */
+    height: auto;
+    z-index: 1; /* Asegura que las imágenes estén detrás del contenido principal */
+}
+
+#left-image-container {
+    left: 0; /* Alinea a la izquierda */
+}
+
+#right-image-container {
+    right: 0; /* Alinea a la derecha */
+}
+
+/* Imágenes */
+.image-container .image {
+    width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+    height: auto;
+    border-radius: 50%; /* Hace las imágenes circulares */
+    margin: 10px;
+    object-fit: cover; /* Mantiene las proporciones de la imagen */
+    opacity: 1; /* Hace visibles las imágenes */
+}
+.container-content {
+    width: 70%;
+    margin: auto;
+    padding-left: 10%;
+    padding-right: 10%;
+    z-index: 2;
+}
+
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr); /* Dos columnas con tamaño igual */
+    gap: 20px; /* Espacio entre los botones */
+    justify-items: center; /* Centra los botones horizontalmente */
+    margin-top: 20px; /* Espacio superior para separar del contenido anterior */
+}
+
+.grid-container button {
+    width: 100%; /* Los botones ocupan el 100% de la columna */
+}
+/* Ajuste del contenedor del cuento */
+.cuento {
+    max-width: 80%;
+    margin: 1% auto;
+    padding: 1.5%;
+    background-color: #ffa502;
+    border-radius: 20px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    height: 35vh; /* Reducir altura para pantallas más pequeñas */
+    overflow-y: auto;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    text-align: center;
+    color: #fff;
+}
+
+.hidden {
+    display: none;
+}
+
+.pressed {
+    background-color: #ff6b6b; /* Cambia el color de fondo */
+    animation: glowing 1.5s infinite; /* Mantén la animación del fondo */
+    box-shadow: none; /* Elimina las sombras para dar sensación de estar "presionado" */
+    transform: scale(0.98); /* Simula una leve presión */
+    cursor: not-allowed; /* Cambia el cursor */
+}
+
+.cuento p {
+    animation: fadeIn 2s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Estilos del formulario */
+form {
+    max-width: 100%;
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    color: #fff;
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.input-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 100px;
+}
+
+.button-player {
+    position: fixed; /* Cambiamos a 'fixed' para que siempre esté visible */
+    bottom: 80px; /* Ajustamos la posición para que esté más alto */
+    right: 30px; /* Ajustamos un poco el espacio a la derecha */
+    width: 50px; /* Hacemos el botón un poco más pequeño */
+    height: 50px; /* Ajustamos la altura también */
+    background-color: #ffcc66; /* Amarillo cálido */
+    border: none;
+    border-radius: 50%; /* Forma circular */
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2); /* Sombras para darle volumen */
+    cursor: pointer;
+    z-index: 20; /* Asegura que esté encima del personaje */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: transform 0.3s ease, background-color 0.3s ease;
+}
+
+.button-player i {
+    font-size: 1.5rem; /* Icono un poco más pequeño */
+    color: #ff6b6b; /* Rojo cálido que armoniza con el diseño */
+}
+
+.button-player:hover {
+    transform: scale(1.1); /* Agrandamos al pasar el cursor */
+    background-color: #ffe66d; /* Cambia el color al pasar el cursor */
+}
+
+label {
+    color: #FFA502; /* Cambia el color de las etiquetas a naranja cálido */
+    font-weight: bold;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+
+.input-item {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+/* Cambiar el color del texto y agregar un borde a los inputs */
+input[type="text"] {
+    color: #4A90E2; /* Cambia el color del texto */
+    border: 2px solid #FF6B6B; /* Borde de color rojo cálido */
+    border-radius: 10px; /* Bordes redondeados */
+    padding: 12px;
+    font-size: 1.1rem;
+    box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra interior */
+    margin-bottom: 20px;
+    width: 100%;
+    transition: background 0.3s, border-color 0.3s; /* Transición suave para el borde y fondo */
+}
+/* Reproductor de audio */
+.audio-player {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+input[type="text"]:focus {
+    border-color: #FFA502; /* Cambia el color del borde al hacer focus */
+    outline: none; /* Quitar el borde por defecto de focus */
+    background-color: #FFF3E0; /* Fondo claro cuando el campo está seleccionado */
+}
+
+/* Botones en una fila */
+.button-container {
+    display: flex;
+    justify-content: space-between; /* Alinear los botones en fila */
+    gap: 10px; /* Espacio entre los botones */
+    margin-top: 20px;
+}
+
+/* Estilo de los botones */
+button {
+    background: #ff6b6b; /* Rojo cálido */
+    border: none;
+    color: #fff;
+    padding: 10px 20px;
+    border-radius: 15px;
+    font-size: 1.3rem;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s ease;
+    margin: 5px;
+    position: relative;
+    z-index: 1;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 180px;
+    height: 50px;
+}
+
+button:hover {
+    transform: scale(1.1);
+    box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+}
+
+button:disabled {
+    background: #d3d3d3;
+    cursor: not-allowed;
+    box-shadow: none;
+}
+
+/* Botones alineados uniformemente */
+.button, .reset-btn {
+    width: 220px; /* Ancho ajustado */
+    height: 50px; /* Alto ajustado */
+    border: none;
+    outline: none;
+    color: #fff;
+    background: #ff8800; /* Fondo oscuro */
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 10px;
+    transition: background-color 0.3s ease, transform 0.1s ease;
+}
+
+.button:before, .reset-btn:before {
+    content: '';
+    background: linear-gradient(45deg, #ff6b6b, #ffbe76, #ffe66d);
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing 20s linear infinite;
+    opacity: 0;
+    transition: opacity .3s ease-in-out;
+    border-radius: 10px;
+}
+
+button:hover:before {
+    opacity: 1;
+}
+.button:after, .reset-btn:after {
+    z-index: -1;
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #ff6b6b; /* Fondo oscuro */
+    left: 0;
+    top: 0;
+    border-radius: 10px;
+}
+
+.error-message {
+    font-size: 12px;
+    color: red;
+    margin-top: 5px;
+}
+
+@keyframes glowing {
+    0% { background-position: 0 0; }
+    50% { background-position: 400% 0; }
+    100% { background-position: 0 0; }
+}
+.button:active, .reset-btn:active {
+    color: #000; /* Cambia el color de texto temporalmente al negro */
+    transform: scale(0.95); /* Hace que el botón se vea más pequeño al ser presionado */
+    transition: transform 0.1s ease; /* Animación de la escala */
+}
+
+.button:active:after, .reset-btn:active:after {
+    background: transparent; /* Elimina el fondo al presionar */
+
+
+button:after {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #ffcc66; /* Amarillo cálido */
+    left: 0;
+    top: 0;
+    border-radius: 15px;
+    z-index: 1;
+}
+
+button:active {
+    transform: scale(0.95);
+    transition: transform 0.1s ease;
+}
+
+/* Contenedores de las imágenes */
+.image-container {
+    position: fixed;
+    top: 30%; /* Ajusta la altura donde se muestra la imagen */
+    width: 18%; /* Ajusta el ancho de las imágenes para que sean más grandes */
+    height: auto;
+    z-index: 1;
+}
+
+/* Mover las imágenes más hacia el centro */
+#left-image-container {
+    left: 5%; /* Alinea la imagen izquierda más hacia el centro */
+}
+
+#right-image-container {
+    right: 5%; /* Alinea la imagen derecha más hacia el centro */
+}
+
+/* Imágenes */
+.image-container .image {
+    width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+    height: auto;
+    border-radius: 50%; /* Hace las imágenes circulares */
+    margin: 10px;
+    object-fit: cover; /* Mantiene las proporciones de la imagen */
+    opacity: 1; /* Hace visibles las imágenes */
+}
+
+
+/* Contenedor principal (formulario y contenido central) */
+.container-content {
+    width: 70%; /* El contenido principal ocupa el 70% del ancho de la pantalla */
+    margin: auto; /* Centra el contenido */
+    padding-left: 10%; /* Deja espacio para las imágenes a la izquierda */
+    padding-right: 10%; /* Deja espacio para las imágenes a la derecha */
+    z-index: 2; /* Asegura que el contenido esté encima de las imágenes */
+}
+
+/* Contenedor del formulario */
+form {
+    max-width: 100%; /* Ajusta el ancho del formulario al 100% del contenedor */
+    padding: 2%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* Estilos para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .cuento {
+        font-size: 1.2rem;
+        height: 30vh; /* Reducir altura en pantallas pequeñas */
+    }
+
+    .button-player {
+        bottom: 60px; /* Ajustar la posición del botón en pantallas pequeñas */
+        width: 45px; /* Hacer el botón más pequeño */
+        height: 45px; /* Ajustar la altura del botón */
+    }
+
+    .container-content {
+        width: 85%; /* Aumentar el ancho del contenido en pantallas pequeñas */
+    }
+}
+/* Responsive para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .container-content {
+        width: 90%; /* En pantallas pequeñas, el contenido ocupa más espacio */
+        padding-left: 5%; /* Ajusta el espacio a los lados */
+        padding-right: 5%; /* Ajusta el espacio a los lados */
+    }
+
+    
+
+    .image-container {
+        width: 20%; /* Aumenta el tamaño de las imágenes en pantallas más pequeñas */
+    }
+}}

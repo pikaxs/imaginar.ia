@@ -1,0 +1,155 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    height: 100vh;
+    background-color: #f0f8ff;
+    margin: 0;
+    font-family: 'Arial', sans-serif;
+}
+
+h1 {
+    color: #ff69b4;
+    margin-bottom: 20px;
+}
+
+.container {
+    position: relative;
+    width: 200px;
+    height: 300px;
+}
+
+.ground {
+    width: 100%;
+    height: 20px;
+    background-color: #228B22;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+.seed {
+    width: 30px;
+    height: 20px;
+    background-color: brown;
+    border-radius: 15px;
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    cursor: pointer;
+    animation: pulse 1.5s infinite ease-in-out;
+}
+
+@keyframes pulse {
+    0% { transform: translateX(-50%) scale(1); }
+    50% { transform: translateX(-50%) scale(1.1); }
+    100% { transform: translateX(-50%) scale(1); }
+}
+
+.flower {
+    position: absolute;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: none;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flower.grow {
+    display: flex;
+    animation: growFlower 4s ease-in-out forwards;
+}
+
+@keyframes growFlower {
+    0% {
+        transform: translateX(-50%) scale(0);
+    }
+    50% {
+        transform: translateX(-50%) scale(1.1);
+    }
+    100% {
+        transform: translateX(-50%) scale(1);
+    }
+}
+
+.stem {
+    width: 5px;
+    height: 80px;
+    background-color: green;
+    transform-origin: bottom;
+    animation: growStem 2s ease forwards;
+}
+
+@keyframes growStem {
+    from {
+        height: 0;
+    }
+    to {
+        height: 80px;
+    }
+}
+
+.petal {
+    width: 30px;
+    height: 30px;
+    background-color: yellow;
+    border-radius: 50%;
+    position: absolute;
+    opacity: 0;
+    transform-origin: bottom;
+}
+
+.petal1 { top: -10px; left: 0; }
+.petal2 { top: -10px; right: 0; }
+.petal3 { top: 10px; left: -20px; }
+.petal4 { top: 10px; right: -20px; }
+.petal5 { top: 30px; left: 0; }
+
+.petal.grow {
+    animation: growPetal 1s ease forwards;
+}
+
+@keyframes growPetal {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+.petal1.grow { animation-delay: 2s; }
+.petal2.grow { animation-delay: 2.3s; }
+.petal3.grow { animation-delay: 2.6s; }
+.petal4.grow { animation-delay: 2.9s; }
+.petal5.grow { animation-delay: 3.2s; }
+
+.center {
+    width: 20px;
+    height: 20px;
+    background-color: orange;
+    border-radius: 50%;
+    position: absolute;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0;
+    animation: growCenter 1s ease forwards;
+    animation-delay: 3.5s;
+}
+
+@keyframes growCenter {
+    from {
+        opacity: 0;
+        transform: scale(0);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}

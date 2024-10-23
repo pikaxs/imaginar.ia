@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>imaginary.ia</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="icon" type="image/jpg" href="{{ url_for('static', filename='images/icon.jpg') }}">
+</head>
+<style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&family=Comic+Neue:wght@400;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+    
+    /* Estilos generales */
+    body {
+        background-color: #7cc2ff; /* Fondo azul suave */
+        font-family: 'Comic Neue', cursive; /* Fuente más infantil */
+        color: #fff;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        overflow: hidden;
+    }
+    
+    /* Spinner de carga */
+    .spinner-container {
+        display: none; /* Oculto por defecto */
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1000;
+    }
+    
+    .spinner {
+        border: 8px solid #f3f3f3;
+        border-radius: 50%;
+        border-top: 8px solid #4A96D9; /* Color del círculo de carga */
+        width: 60px;
+        height: 60px;
+        animation: spin 2s linear infinite;
+    }
+    
+    @keyframes spin {
+        0% { transform: rotate(0deg); }
+        100% { transform: rotate(360deg); }
+    }
+    
+    /* Encabezado */
+    .header {
+        background-color: #BF244E; /* Rojo */
+        padding: 1% 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-family: 'Roboto', sans-serif;
+    }
+    
+    h1 {
+        color: #fff;
+        font-size: 4rem; /* Tamaño de texto más grande */
+        font-family: 'Fredoka One', cursive;
+        margin: 0;
+    }
+    
+    h1 span {
+        display: inline-block;
+        animation: wave 1.5s ease-in-out infinite;
+        color: #4A96D9; /* Azul */
+    }
+    
+    h1 span:nth-child(odd) {
+        animation-delay: 0.1s;
+    }
+    
+    h1 span:nth-child(even) {
+        animation-delay: 0.3s;
+    }
+    
+    @keyframes wave {
+        0%, 100% { transform: translateY(0); }
+        50% { transform: translateY(-10px); }
+    }
+    
+    /* Contenedor principal del contenido */
+    .container {
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        padding: 2%;
+        flex: 1;
+        overflow-y: auto;
+    }
+    
+    .character {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        width: 80px;
+        height: auto;
+        z-index: 9999;
+    }
+    
+    .character img {
+        width: 100%;
+        height: auto;
+        display: block;
+    }
+    
+    /* Contenedores de las imágenes */
+    .image-container {
+        position: absolute;
+        top: 10%; /* Ajustamos la posición de las imágenes */
+        width: 15%; /* Ajusta el ancho de las imágenes */
+        z-index: 1;
+    }
+    
+    #left-image-container {
+        left: 2%; /* Alinea la imagen izquierda más hacia el borde */
+    }
+    
+    #right-image-container {
+        right: 2%; /* Alinea la imagen derecha más hacia el borde */
+    }
+    
+    .image {
+        opacity: 0; /* Las imágenes están ocultas inicialmente */
+        transition: opacity 1s ease-in-out; /* Suavizar la transición cuando aparecen */
+    }
+
+    /* Imágenes */
+    .image-container .image {
+        width: 100%; /* La imagen ocupa todo el ancho del contenedor */
+        height: auto;
+        border-radius: 50%; /* Hace las imágenes circulares */
+        margin: 10px;
+        object-fit: cover; /* Mantiene las proporciones de la imagen */
+        opacity: 1; /* Hace visibles las imágenes */
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.3);
+    }
+    
+    /* Ajuste del contenedor del cuento */
+    .container-content {
+        width: 75%; /* Ajuste para que las imágenes no choquen */
+        margin: auto;
+        padding-left: 5%; /* Reducir padding para dejar espacio a las imágenes */
+        padding-right: 5%;
+        z-index: 2;
+    }
+    
+    .cuento {
+        max-width: 90%;
+        margin: 1% auto; /* Aumentar el margen para darle más espacio desde los botones */
+        padding: 1.5%;
+        background-color: #BF244E; /* Fondo rojo */
+        border-radius: 20px;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+        height: 30vh; /* Reducir la altura para evitar el desbordamiento */
+        overflow-y: auto;
+        font-size: 1.8rem; /* Texto dentro del cuento un poco más grande */
+        line-height: 1.6;
+        text-align: center;
+        color: #fff;
+        z-index: 1; /* Asegurarse de que esté por encima de otros elementos */
+    }
+    
+    .hidden {
+        display: none;
+    }
+    
+    /* Estilos del formulario */
+    form {
+        max-width: 100%;
+        padding: 2%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    label {
+        display: block;
+        color: #fff;
+        font-weight: bold;
+        font-size: 2.5rem; /* Aumentar tamaño de fuente de los labels */
+        font-family: 'Comic Neue', cursive; /* Fuente más infantil */
+        margin-bottom: 10px;
+    }
+    
+    .cuento-label span {
+        display: inline-block;
+        animation: wave 1.5s ease-in-out infinite, colorChange 3s linear infinite;
+        color: #4A96D9; /* Color inicial */
+    }
+    
+    /* Animación del cambio de colores */
+@keyframes colorChange {
+    0% { color: #BF244E; }   /* Rojo principal - inicio */
+    5% { color: #990F02; }   /* Rojo oscuro */
+    10% { color: #D1322E; }  /* Rojo más claro */
+    15% { color: #E3242B; }  /* Rojo vivo */
+    20% { color: #600F0B; }  /* Rojo oscuro */
+    25% { color: #600C02; }  /* Rojo intenso */
+    30% { color: #B7100A; }  /* Rojo brillante */
+    35% { color: #900603; }  /* Rojo fuerte */
+    40% { color: #910D09; }  /* Rojo oscuro */
+    
+    /* Transición hacia tonos morados */
+    45% { color: #A52DC3; }  /* Morado vibrante */
+    50% { color: #7A4C8C; }  /* Morado medio */
+    55% { color: #730195; }  /* Morado oscuro */
+    60% { color: #620534; }  /* Burdeos */
+    65% { color: #E09EF5; }  /* Morado claro */
+    70% { color: #641B39; }  /* Rosa oscuro */
+    75% { color: #A10559; }  /* Rosa intenso */
+
+    /* Transición hacia tonos azules */
+    80% { color: #383DB2; }  /* Azul medio */
+    85% { color: #6ACFD7; }  /* Turquesa claro */
+    90% { color: #090C6D; }  /* Azul oscuro */
+    95% { color: #2A185B; }  /* Azul púrpura */
+    100% { color: #BF244E; }  /* Rojo principal - fin */
+}
+
+.cuento-label span {
+    display: inline-block;
+    animation: wave 1.5s ease-in-out infinite, colorChange 10s linear infinite;
+    color: #BF244E; /* Color inicial */
+}
+
+/* Animación del movimiento (wave) */
+@keyframes wave {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+    
+    /* Para añadir retraso a cada letra, se aplica un delay en cada span */
+    .cuento-label span:nth-child(odd) {
+        animation-delay: 0.1s;
+    }
+    
+    .cuento-label span:nth-child(even) {
+        animation-delay: 0.3s;
+    }
+    
+    
+    .input-container {
+        display: flex;
+        flex-direction: column; /* Alinear el ícono del micrófono y el campo de texto verticalmente */
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        margin-bottom: 20px;
+    }
+    
+    input[type="text"] {
+        color: #4A96D9; /* Azul */
+        border: 2px solid #BF244E; /* Rojo */
+        border-radius: 10px; /* Bordes redondeados */
+        padding: 12px;
+        font-size: 1.5rem; /* Tamaño de letra más grande */
+        box-shadow: inset 2px 2px 5px rgba(0, 0, 0, 0.1); /* Sombra interior */
+        margin-bottom: 10px; /* Margen entre el campo de texto y el micrófono */
+        width: 60%; /* Tamaño del campo de texto */
+        transition: background 0.3s, border-color 0.3s;
+    }
+    
+    input[type="text"]:focus {
+        border-color: #4A96D9; /* Azul */
+        outline: none;
+        background-color: #FFF3E0; /* Fondo claro */
+    }
+    
+    /* Botón de micrófono */
+    .mic-button {
+        background-color: #BF244E;
+        border: none;
+        border-radius: 50%;
+        color: white;
+        width: 50px;
+        height: 50px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+        transition: transform 0.3s ease, background-color 0.3s; /* Transición del color y escala */
+        position: relative; /* Para el efecto de la animación */
+        overflow: hidden; /* Oculta el desbordamiento */
+        z-index: 1;
+    }
+    
+    .mic-button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .mic-button:before {
+        content: '';
+        background: linear-gradient(45deg, #BF244E, #4A96D9); /* Colores de la animación */
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing 20s linear infinite; /* Animación de colores */
+        opacity: 0;
+        transition: opacity .3s ease-in-out;
+        border-radius: 50%; /* Mantiene la forma circular */
+    }
+    
+    .mic-button:hover:before {
+        opacity: 1; /* Aparece el efecto de color al hacer hover */
+    }
+
+    @keyframes glowing {
+        0% { background-position: 0 0; }
+        50% { background-position: 400% 0; }
+        100% { background-position: 0 0; }
+    }
+    
+    /* Botones en una fila */
+    .button-container {
+        display: flex;
+        justify-content: center; /* Alinear los botones en fila */
+        gap: 20px; /* Espacio entre los botones */
+        margin-top: 10px;
+        margin-bottom 5px;
+        
+    }
+    
+    /* Estilo de los botones */
+    button {
+        background: #BF244E; /* Rojo */
+        border: #297EBF;
+        color: #fff;
+        padding: 12px 25px;
+        border-radius: 15px;
+        font-size: 1.5rem; /* Aumentar tamaño de fuente */
+        cursor: pointer;
+        transition: background 0.3s, transform 0.2s ease;
+        margin: 5px;
+        position: relative;
+        z-index: 1;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        width: 220px;
+        height: 60px;
+        display: flex; /* Cambiamos la propiedad de display */
+        justify-content: center; /* Centramos horizontalmente */
+        align-items: center; /* Centramos verticalmente */
+        text-align: center;
+    }
+    
+    button:hover {
+        transform: scale(1.1);
+        box-shadow: 0 12px 20px rgba(0, 0, 0, 0.2);
+    }
+    
+    button:disabled {
+        background: #d3d3d3;
+        cursor: not-allowed;
+        box-shadow: none;
+    }
+    
+    /* Efecto para botones */
+    .button:before, .reset-btn:before {
+        content: '';
+        background: linear-gradient(45deg, #BF244E, #4A96D9);
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        background-size: 400%;
+        z-index: -1;
+        filter: blur(5px);
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity .3s ease-in-out;
+        border-radius: 10px;
+    }
+    
+    button:hover:before {
+        opacity: 1;
+    }
+    
+    @keyframes glowing {
+        0% { background-position: 0 0; }
+        50% { background-position: 400% 0; }
+        100% { background-position: 0 0; }
+    }
+    
+    /* Reproductor de audio */
+    .audio-player {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 10px; /* Añadir margen superior para despegar del cuento */
+        margin-bottom: 20px;
+    }
+    
+    /* Responsive para pantallas más pequeñas */
+    @media (max-width: 768px) {
+        .cuento {
+            font-size: 1.2rem;
+            height: 30vh; /* Reducir altura en pantallas pequeñas */
+        }
+    
+        .button-container {
+            flex-direction: column; /* Cambiar a columna en pantallas más pequeñas */
+        }
+    
+        .container-content {
+            width: 85%;
+        }
+    
+        .image-container {
+            width: 25%;
+        }
+    }
+    
+</style>
+<body>
+    <div class="header">
+        <h1>
+            <span>I</span><span>M</span><span>A</span><span>G</span><span>I</span><span>N</span><span>A</span><span>R</span><span>.</span><span>I</span><span>A</span>
+        </h1>
+    </div>
+
+    <!-- Spinner de carga -->
+    <div class="spinner-container" id="spinner">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Imágenes laterales -->
+    <div class="image-container" id="left-image-container">
+        <img src="{{ url_for('static', filename='images/image1.png') }}" alt="Imagen 1" class="image">
+    </div>
+    <div class="image-container" id="right-image-container">
+        <img src="{{ url_for('static', filename='images/image2.png') }}" alt="Imagen 2" class="image">
+    </div>
+
+    <!-- Contenedor principal del formulario y contenido -->
+    <div class="container-content">
+        <form id="main-form" method="POST" onsubmit="return showLoadingSpinner(event)">
+            <!-- Si hay un cuento generado, mostrar la sección de respuesta -->
+            {% if cuento %}
+                <label for="user_input" class="cuento-label">
+                    <span>T</span><span>u</span> <span>r</span><span>e</span><span>s</span><span>p</span><span>u</span><span>e</span><span>s</span><span>t</span><span>a</span><span>:</span>
+                </label>
+                <div class="input-container">
+                    <input type="text" id="theme" name="theme" oninput="toggleSubmitButton()" required>
+                    <!-- Botón para usar el micrófono (icono) -->
+                    <button type="button" id="mic-btn" class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+
+                <div class="button-container">
+                    <!-- Botón para reiniciar el cuento con confirmación -->
+                    <form action="/reset" method="POST" onsubmit="return confirmReset()">
+                        <button type="submit" class="reset-btn">Reiniciar Cuento</button>
+                    </form>
+                    <!-- Botón para generar PDF con confirmación -->
+                    <form action="/download_word" method="GET" onsubmit="return confirmGeneratePDF()">
+                        <button type="submit" id="pdf-btn" class="button">Generar preguntas</button>
+                    </form>
+                    <!-- Botón para enviar la respuesta -->
+                    <button type="submit" id="submit-btn" class="button" disabled>Enviar Respuesta</button>
+                </div>
+            {% else %}
+                <div class="input-container">
+                    <label for="theme" class="cuento-label">
+                        <span>¿</span><span>D</span><span>e</span> <span>q</span><span>u</span><span>é</span> <span>q</span><span>u</span><span>i</span><span>e</span><span>r</span><span>e</span><span>s</span> <span>q</span><span>u</span><span>e</span> <span>s</span><span>e</span><span>a</span> <span>t</span><span>u</span> <span>c</span><span>u</span><span>e</span><span>n</span><span>t</span><span>o</span><span>?</span>
+                    </label>
+                    
+                    <input type="text" id="theme" name="theme" oninput="toggleGenerateButton()" required>
+                    <!-- Botón para usar el micrófono (icono) -->
+                    <button type="button" id="mic-btn" class="mic-button">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <div class="button-group">
+                    <form id="generate-form" method="POST" onsubmit="return showLoadingSpinner(event)">
+                        <button type="submit" id="bt1" class="button" disabled>Generar Cuento</button>
+                    </form>
+                </div>
+            {% endif %}
+        </form>
+
+        <!-- Contenedor de la historia -->
+        <div class="container">
+            <div class="cuento" id="story-container">
+                {% if cuento %}
+                    <p>{{ cuento|safe }}</p>
+                {% else %}
+                    <p>No se ha generado un cuento todavía.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <input type="hidden" id="mic-output" name="mic_output">
+
+    <!-- Personaje flotante -->
+    <div class="character">
+        <img src="{{ url_for('static', filename='images/isac.gif') }}">
+    </div>
+
+    {% if audio_url %}
+        <div class="audio-player">
+            <audio controls autoplay>
+                <source src="{{ audio_url }}" type="audio/mp3">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+        </div>
+    {% endif %}
+
+    <!-- Scripts de funcionalidad -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const storyContainer = document.getElementById('story-container');
+            const cuentoText = storyContainer.textContent;
+        
+            if (cuentoText !== "No se ha generado un cuento todavía.") {
+                storyContainer.innerHTML = "";
+                typeWriter(storyContainer, cuentoText);
+                document.getElementById("pdf-btn").style.display = "block"; // Mostrar botón de PDF cuando el cuento está generado
+            } else {
+                const images = document.querySelectorAll('.image');
+                images.forEach(img => {
+                    img.style.opacity = 0;
+                });
+            }
+        });
+
+        const micBtn = document.getElementById('mic-btn');
+        const userInput = document.getElementById('theme');
+        const micOutput = document.getElementById('mic-output');
+
+        micBtn.addEventListener('click', () => {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.lang = 'es-ES';
+            recognition.interimResults = false;
+            recognition.maxAlternatives = 1;
+
+            recognition.start();
+
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                userInput.value = transcript;
+                micOutput.value = transcript;
+                toggleSubmitButton(); // Verificar si se habilita el botón
+            };
+
+            recognition.onerror = (event) => {
+                console.error('Error de reconocimiento de voz:', event.error);
+            };
+        });
+
+        
+        function typeWriter(element, text, delay = 50) {
+            element.innerHTML = '';
+            let index = 0;
+            const interval = setInterval(() => {
+                if (index < text.length) {
+                    element.innerHTML += text.charAt(index);
+                    index++;
+
+                    // Revelar las imágenes a medida que avanza el texto
+                    if (index % Math.floor(text.length / 3) === 0) { // Ajusta la división según cuántas imágenes tengas
+                        revealNextImage();
+                    }
+                } else {
+                    clearInterval(interval);
+                    playAudio(); // Reproducir el audio cuando se termine de mostrar el texto
+                }
+            }, delay);
+        }
+
+
+        let imageIndex = 0;
+        function revealNextImages() {
+            const images = document.querySelectorAll('.image');
+            if (imageIndex < images.length) {
+                images[imageIndex].style.opacity = 1;
+                imageIndex++;
+            }
+        }
+
+        function playAudio() {
+            const audio = new Audio("{{ url_for('static', filename='audio/cuento.mp3') }}");
+            audio.play();
+        }
+
+        function confirmReset() {
+            return confirm('¿Estás seguro de que quieres reiniciar el cuento? Perderás todo el progreso actual.');
+        }
+
+        function confirmGeneratePDF() {
+            return confirm('¿Deseas generar el WORD con las preguntas de comprensión lectora?');
+        }
+
+        // Mostrar el spinner cuando se presiona el botón de "Generar Cuento"
+        function showLoadingSpinner(event) {
+            const spinner = document.getElementById('spinner');
+            const generateButton = document.getElementById('bt1');
+            generateButton.classList.add('hidden'); // Oculta el botón de generar cuento
+            spinner.style.display = 'block'; // Mostrar el spinner
+            return true; // Permitir que el formulario se envíe
+        }
+
+        // Función para habilitar/deshabilitar el botón de "Generar Cuento"
+        function toggleGenerateButton() {
+            const themeInput = document.getElementById('theme');
+            const generateButton = document.getElementById('bt1');
+            generateButton.disabled = themeInput.value.trim() === "";
+        }
+
+        // Función para habilitar/deshabilitar el botón de "Enviar Respuesta"
+        function toggleSubmitButton() {
+            const userInput = document.getElementById('user_input');
+            const submitButton = document.getElementById('submit-btn');
+            submitButton.disabled = userInput.value.trim() === "";
+        }
+    </script>
+</body>
+</html>
